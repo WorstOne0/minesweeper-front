@@ -1,5 +1,7 @@
 // Next
 import { create } from "zustand";
+// Controllers
+import { useSettingsController } from "./settings_controller";
 // Models
 import { DIFFICULTIES, type Board, type Difficulty, type GameStatus } from "@/core/models";
 // Utils
@@ -13,6 +15,7 @@ type GameController = {
   game: number;
   startedAt: number | null;
   seconds: number;
+  isNewBest: boolean;
   reveal: (row: number, column: number) => void;
   toggleFlag: (row: number, column: number) => void;
   restart: (difficulty?: Difficulty) => void;
@@ -26,6 +29,7 @@ export const useGameController = create<GameController>()((set, get) => ({
   game: 0,
   startedAt: null,
   seconds: 0,
+  isNewBest: false,
   reveal: (row, column) => {
     const { board, status, difficulty, startedAt } = get();
     const cell = board[row][column];
@@ -36,14 +40,24 @@ export const useGameController = create<GameController>()((set, get) => ({
     const next = cell.isOpen ? chord(armed, row, column) : openFrom(armed, row, column);
     const start = startedAt ?? Date.now();
     const seconds = Math.floor((Date.now() - start) / 1000);
+    const isLost = next.some((cells) => cells.some((cell) => cell.isOpen && cell.isMine));
+    const isWon = !isLost && next.every((cells) => cells.every((cell) => cell.isMine || cell.isOpen));
 
-    if (next.some((cells) => cells.some((cell) => cell.isOpen && cell.isMine))) return set({ board: next, status: "lost", startedAt: start, seconds });
+    if (!isLost && !isWon) return set({ board: next, status: "playing", startedAt: start });
 
-    if (next.every((cells) => cells.every((cell) => cell.isMine || cell.isOpen))) {
-      return set({ board: next.map((cells) => cells.map((cell) => (cell.isMine ? { ...cell, isFlagged: true } : cell))), status: "won", startedAt: start, seconds });
-    }
+    const { stats, recordGame } = useSettingsController.getState();
+    const best = stats[difficulty].best;
+    recordGame(difficulty, isWon, seconds);
 
-    set({ board: next, status: "playing", startedAt: start });
+    if (isLost) return set({ board: next, status: "lost", startedAt: start, seconds });
+
+    set({
+      board: next.map((cells) => cells.map((cell) => (cell.isMine ? { ...cell, isFlagged: true } : cell))),
+      status: "won",
+      startedAt: start,
+      seconds,
+      isNewBest: best === null || seconds < best,
+    });
   },
   toggleFlag: (row, column) => {
     const { board, status } = get();
@@ -53,7 +67,7 @@ export const useGameController = create<GameController>()((set, get) => ({
     set({ board: board.map((cells, rowIndex) => (rowIndex !== row ? cells : cells.map((cell, columnIndex) => (columnIndex !== column ? cell : { ...cell, isFlagged: !cell.isFlagged })))) });
   },
   restart: (difficulty = get().difficulty) =>
-    set((state) => ({ difficulty, board: createBoard(DIFFICULTIES[difficulty].size), status: "ready", game: state.game + 1, startedAt: null, seconds: 0 })),
+    set((state) => ({ difficulty, board: createBoard(DIFFICULTIES[difficulty].size), status: "ready", game: state.game + 1, startedAt: null, seconds: 0, isNewBest: false })),
   tick: () => {
     const { status, startedAt } = get();
 

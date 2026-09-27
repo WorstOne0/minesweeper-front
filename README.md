@@ -14,7 +14,9 @@
 - **Flags** — right click, or hold a cell on a phone; the counter shows the mines left.
 - **Chords** — click an open number with as many flags around it to open the rest of its neighbours.
 - **A timer** from the first click to the end, and a board that locks once the game is won or lost.
-- The board scales with the window, down to a phone.
+- **Your record** — the best time and the games won on each board, kept in the browser, with a "New best"
+  on the result card.
+- The chess app's charcoal look around the board, which scales with the window down to a phone.
 
 ---
 
@@ -40,14 +42,16 @@ pnpm dev                 # http://localhost:3000
 ```
 src/
   app/
-    layout.tsx            metadata, Nunito and Graduate
-    page.tsx              the sidebar (timer, mines left, retry, difficulty) and the result
-    _components/          board, cell
+    layout.tsx            metadata, Nunito
+    providers.tsx         reads the saved settings after mount
+    page.tsx              the rail, the bar with mines left and the timer, the cleared bar
+    _components/          board, cell, result_card, game_panel (difficulty, record, how to play, new game)
   core/
-    controllers/          game_controller — the board, the status, the clock
-    models/               Cell, Board, DIFFICULTIES
-  utils/                  minesweeper — placing mines, opening cells, chords
-  styles/                 tokens → theme → base
+    controllers/          game_controller (the board, the status, the clock),
+                          settings_controller (the difficulty and the records, saved in localStorage)
+    models/               Cell, Board, DIFFICULTIES, DifficultyStats
+  utils/                  minesweeper (placing mines, opening cells, chords), format
+  styles/                 tokens → theme → base → utilities
 public/logo/              icon.svg
 ```
 

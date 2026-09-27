@@ -12,3 +12,6 @@ export const DIFFICULTIES = {
 };
 
 export type Difficulty = keyof typeof DIFFICULTIES;
+
+// Best is in seconds, null until the first win on that board.
+export type DifficultyStats = { best: number | null; wins: number; played: number };

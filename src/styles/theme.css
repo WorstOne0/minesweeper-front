@@ -1,22 +1,50 @@
-/* Tailwind's own palette is switched off: the only colours that exist are the roles below. */
+/* Tailwind's own palette is switched off: the only colours that exist are the roles below,
+   plus white for the icon on a result disc. `text-gray-500` does not compile. */
 @theme {
   --color-*: initial;
+  --color-white: #ffffff;
+
+  /* The result waits a beat after the last click, longer on a loss so the mines show first. */
+  --animate-result-in: fade-in 0.35s ease-out both;
+  --animate-result-card: rise-in 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.6rem) scale(0.94);
+    }
+  }
 }
 
 @theme inline {
-  --font-sans: var(--font-nunito), system-ui, sans-serif;
-  --font-clock: var(--font-graduate), monospace;
+  --font-sans: var(--font-nunito);
 
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-tile: var(--tile);
+  --color-line: var(--line);
+  --color-overlay: var(--overlay);
+  --color-title: var(--title);
+  --color-soft: var(--soft);
+  --color-meta: var(--meta);
+  --color-faint: var(--faint);
   --color-action: var(--action);
   --color-on-action: var(--on-action);
-  --color-meta: var(--meta);
+  --color-accent: var(--accent);
+  --color-accent-on-action: var(--accent-on-action);
+  --color-win: var(--win);
+  --color-loss: var(--loss);
+  --color-board: var(--board);
   --color-cell: var(--cell);
   --color-cell-hover: var(--cell-hover);
   --color-mine: var(--mine);
   --color-flag: var(--flag);
-  --color-overlay: var(--overlay);
-  --color-banner: var(--banner);
   --color-number-1: var(--number-1);
   --color-number-2: var(--number-2);
   --color-number-3: var(--number-3);
@@ -26,8 +54,12 @@
   --color-number-7: var(--number-7);
   --color-number-8: var(--number-8);
 
+  --radius-card: var(--card-radius);
+
+  --shadow-raise: var(--raise-shadow);
+  --shadow-raise-lg: var(--raise-lg-shadow);
+  --shadow-frame: var(--frame-shadow);
+  --shadow-inset: var(--inset-shadow);
   /* In em, so an open cell sinks by the same amount at every board size: 15px and 30px on an 18px cell. */
   --shadow-sunk: inset 0.833em 0.833em 1.667em 0 var(--navy-950), inset -0.833em -0.833em 1.667em 0 var(--navy-850);
-  --shadow-well: inset 1rem 1rem 4.3rem var(--navy-925), inset -1rem -1rem 4.3rem var(--navy-875);
-  --shadow-raised: 0.3rem 0.3rem 0.6rem var(--navy-950), -0.3rem -0.3rem 0.6rem var(--navy-850);
 }

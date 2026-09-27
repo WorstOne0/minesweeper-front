@@ -10,7 +10,7 @@ import type { Cell as CellState } from "@/core/models";
 import { FaBomb, FaFlag } from "react-icons/fa";
 
 const NUMBER_COLORS = ["", "text-number-1", "text-number-2", "text-number-3", "text-number-4", "text-number-5", "text-number-6", "text-number-7", "text-number-8"];
-const CELL = "h-full w-full flex items-center justify-center rounded-[0.444em] border-[0.111em] border-background font-bold";
+const CELL = "h-full w-full flex items-center justify-center rounded-[0.444em] border-[0.111em] border-board font-bold";
 const LONG_PRESS = 400;
 
 export default function Cell({ cell, row, column }: { cell: CellState; row: number; column: number }) {
@@ -53,7 +53,7 @@ export default function Cell({ cell, row, column }: { cell: CellState; row: numb
 
   if (cell.isMine && status === "lost") {
     return (
-      <div {...handlers} className={`${CELL} bg-mine text-action`}>
+      <div {...handlers} className={`${CELL} bg-mine text-cell`}>
         <FaBomb />
       </div>
     );
@@ -61,7 +61,7 @@ export default function Cell({ cell, row, column }: { cell: CellState; row: numb
 
   if (cell.isOpen) {
     return (
-      <div {...handlers} className={`${CELL} bg-background shadow-sunk ${NUMBER_COLORS[cell.count]}`}>
+      <div {...handlers} className={`${CELL} bg-board shadow-sunk ${NUMBER_COLORS[cell.count]}`}>
         {cell.count || ""}
       </div>
     );
