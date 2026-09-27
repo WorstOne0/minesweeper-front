@@ -1,70 +1,66 @@
-# Getting Started with Create React App
+# Minesweeper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Minesweeper in the browser at [minesweeper.kuuhaku.dev](https://minesweeper.kuuhaku.dev): three board
+> sizes, a first click that never hits a mine, flags and chords.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Three boards** — Easy 9×9 with 10 mines, Medium 18×18 with 40, Hard 24×24 with 99, picked from the
+  gear.
+- **A safe start** — mines go down on the first click, never on that cell or around it, so every game
+  opens with room to play.
+- **Flags** — right click, or hold a cell on a phone; the counter shows the mines left.
+- **Chords** — click an open number with as many flags around it to open the rest of its neighbours.
+- **A timer** from the first click to the end, and a board that locks once the game is won or lost.
+- The board scales with the window, down to a phone.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech stack
 
-### `npm test`
+Next.js 16 (App Router, Turbopack, standalone output) · React 19 · TypeScript · Tailwind CSS 4 · Zustand
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Getting started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Requires Node 20.9+ and pnpm.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+pnpm install
+pnpm dev                 # http://localhost:3000
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Project structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+src/
+  app/
+    layout.tsx            metadata, Nunito and Graduate
+    page.tsx              the sidebar (timer, mines left, retry, difficulty) and the result
+    _components/          board, cell
+  core/
+    controllers/          game_controller — the board, the status, the clock
+    models/               Cell, Board, DIFFICULTIES
+  utils/                  minesweeper — placing mines, opening cells, chords
+  styles/                 tokens → theme → base
+public/logo/              icon.svg
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Deploy
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Docker, standalone output on port 3000:
 
-## Learn More
+```bash
+docker compose up -d --build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The container joins the external `nginx-proxy` network as `minesweeper`. On the VPS, Nginx Proxy
+Manager forwards `minesweeper.kuuhaku.dev` to `minesweeper:3000` — a route set up by hand in its UI;
+the `VIRTUAL_*` variables in `docker-compose.yml` are only read by jwilder/nginx-proxy.

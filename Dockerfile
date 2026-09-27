@@ -1,16 +1,36 @@
-FROM node:21-alpine
-
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+# ---- deps ----------------------------------------------------------------
+FROM node:24-alpine AS deps
 RUN corepack enable
-
 WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# ---- build ---------------------------------------------------------------
+FROM node:24-alpine AS builder
+RUN corepack enable
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# RUN npm install
-RUN pnpm install
-RUN pnpm run build
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm build
 
-EXPOSE ${PORT}
+# ---- runtime -------------------------------------------------------------
+FROM node:24-alpine AS runner
+WORKDIR /app
 
-CMD ["pnpm", "start"]
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+COPY --from=builder /app/public ./public
+# standalone already contains the pruned node_modules and a server.js entry.
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+
+USER node
+
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]

@@ -1,0 +1,38 @@
+/* Two layers: the palette holds values, the semantic layer holds roles. Markup reads roles only. */
+:root {
+  /* Palette: navy. 900 the page · 950/850 the dark and light halves of every sunk shadow · 925/875 the wells'. */
+  --navy-950: #070a0e;
+  --navy-925: #0c121a;
+  --navy-900: #111923;
+  --navy-875: #16202c;
+  --navy-850: #1b2838;
+  --navy-600: #5c6f8c;
+
+  /* Palette: blue. 500 the closed cells and every label, 400 a closed cell under the pointer. */
+  --blue-400: #327fe2;
+  --blue-500: #0b5ecd;
+
+  --red-500: #e63946;
+
+  /* Palette: the numbers, in the classic order. 7 and 8 are lightened: the classic black and grey vanish on navy. */
+  --number-1: #1053e4;
+  --number-2: #5ece4f;
+  --number-3: #e03616;
+  --number-4: #682d63;
+  --number-5: #af9164;
+  --number-6: #a14ebf;
+  --number-7: #9a9a90;
+  --number-8: #d0d0d0;
+
+  /* Roles */
+  --background: var(--navy-900);
+  --action: var(--blue-500);
+  --on-action: #ffffff;
+  --meta: var(--navy-600);
+  --cell: var(--blue-500);
+  --cell-hover: var(--blue-400);
+  --mine: var(--red-500);
+  --flag: var(--red-500);
+  --overlay: rgb(17 25 35 / 0.3);
+  --banner: rgb(11 94 205 / 0.7);
+}
