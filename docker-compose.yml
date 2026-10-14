@@ -4,7 +4,7 @@ services:
     container_name: minesweeper
     restart: unless-stopped
     environment:
-      - VIRTUAL_HOST=minesweeper.kuuhaku.dev
+      - VIRTUAL_HOST=minesweeper.disboard.dev
       - VIRTUAL_PORT=3000
     expose:
       - 3000

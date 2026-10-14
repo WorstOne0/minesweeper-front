@@ -1,6 +1,6 @@
 # minesweeper_frontend
 
-Minesweeper at minesweeper.kuuhaku.dev. Next.js 16 (App Router, Turbopack), React 19, Tailwind 4,
+Minesweeper at minesweeper.disboard.dev. Next.js 16 (App Router, Turbopack), React 19, Tailwind 4,
 Zustand. General code style lives in `../../general/code_style/` (`next.md`); this file is only what
 is specific to this app.
 

@@ -1,6 +1,6 @@
 # Minesweeper
 
-> Minesweeper in the browser at [minesweeper.kuuhaku.dev](https://minesweeper.kuuhaku.dev): three board
+> Minesweeper in the browser at [minesweeper.disboard.dev](https://minesweeper.disboard.dev): three board
 > sizes, a first click that never hits a mine, flags and chords.
 
 ---
@@ -66,5 +66,5 @@ docker compose up -d --build
 ```
 
 The container joins the external `nginx-proxy` network as `minesweeper`. On the VPS, Nginx Proxy
-Manager forwards `minesweeper.kuuhaku.dev` to `minesweeper:3000` — a route set up by hand in its UI;
+Manager forwards `minesweeper.disboard.dev` to `minesweeper:3000` — a route set up by hand in its UI;
 the `VIRTUAL_*` variables in `docker-compose.yml` are only read by jwilder/nginx-proxy.
