@@ -8,10 +8,21 @@ import "@/styles/index.css";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 
+const DESCRIPTION = "Minesweeper in the browser: three board sizes, a safe first click, flags, chords and your best times.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://minesweeper.disboard.dev"),
   title: "Minesweeper",
-  description: "Minesweeper in the browser: three board sizes, a safe first click, flags, chords and your best times.",
+  description: DESCRIPTION,
   icons: { icon: "/logo/icon.svg" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Minesweeper",
+    title: "Minesweeper · Three boards, a safe first click, flags and chords",
+    description: DESCRIPTION,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
